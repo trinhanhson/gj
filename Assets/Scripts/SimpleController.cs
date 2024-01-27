@@ -180,7 +180,7 @@ public class SimpleController : MonoBehaviour
             case State.Attack:
                 animator.SetTrigger("Attack");
                 ableToAttack = false;
-                DOVirtual.DelayedCall(4, () => { ChangeState(State.Idle); ableToAttack = true; });
+                DOVirtual.DelayedCall(2, () => { ChangeState(State.Idle); ableToAttack = true; });
                 break;
             case State.Win:
                 animator.SetTrigger("Win");
