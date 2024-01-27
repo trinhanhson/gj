@@ -16,7 +16,10 @@ public class Fart : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(AutoDestroy());
+        if (photonView.IsMine)
+        {
+            StartCoroutine(AutoDestroy());
+        }
     }
 
     IEnumerator AutoDestroy()

@@ -65,7 +65,7 @@ public class SimpleController : MonoBehaviour
                         isDie = true;
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                         {
-                            if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)
+                            if (!PhotonNetwork.PlayerList[i].Equals(PhotonNetwork.LocalPlayer))
                             {
                                 photonView.RPC("RPC_Finish", RpcTarget.AllViaServer, PhotonNetwork.PlayerList[i]);
                             }
@@ -80,7 +80,7 @@ public class SimpleController : MonoBehaviour
                         isDie = true;
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                         {
-                            if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)
+                            if (!PhotonNetwork.PlayerList[i].Equals(PhotonNetwork.LocalPlayer))
                             {
                                 photonView.RPC("RPC_Finish", RpcTarget.AllViaServer, PhotonNetwork.PlayerList[i]);
                             }
@@ -94,7 +94,7 @@ public class SimpleController : MonoBehaviour
                         isDie = true;
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                         {
-                            if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)
+                            if (!PhotonNetwork.PlayerList[i].Equals(PhotonNetwork.LocalPlayer))
                             {
                                 photonView.RPC("RPC_Finish", RpcTarget.AllViaServer, PhotonNetwork.PlayerList[i]);
                             }
@@ -111,7 +111,7 @@ public class SimpleController : MonoBehaviour
 
     [PunRPC]
     public void RPC_Finish(Player player)
-    {
+    {Debug.Log(1);
         Manager.Instance.Finish(player);
     }
 
@@ -188,5 +188,16 @@ public class SimpleController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void Restart()
+    {
+        photonView.RPC("RPC_Restart", RpcTarget.AllViaServer);
+    }
+    
+    [PunRPC]
+    public void RPC_Restart()
+    {
+        Manager.Instance.RPC_Restart();
     }
 }

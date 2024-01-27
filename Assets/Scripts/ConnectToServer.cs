@@ -11,6 +11,8 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
 
     public TextMeshProUGUI nameText;
 
+    public GameObject text;
+
     public void Startgame()
     {
         if (nameText.text != "")
@@ -26,6 +28,8 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
         if (Input.GetMouseButtonDown(0) && !nameGO.activeInHierarchy)
         {
             nameGO.SetActive(true);
+            
+            text.SetActive(false);
         }
     }
 
