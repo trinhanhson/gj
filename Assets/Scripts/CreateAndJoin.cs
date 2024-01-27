@@ -79,12 +79,11 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
             GameObject entry = Instantiate(playerEntryPrefab);
             entry.transform.SetParent(playerList);
             entry.transform.localScale = Vector3.one;
-            entry.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = p.NickName;
 
             playerListEntries.Add(p.ActorNumber, entry);
-        }
 
-        // startButton.gameObject.SetActive(true);
+            entry.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + playerListEntries.Count + ": " + p.NickName;
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -92,9 +91,10 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
         GameObject entry = Instantiate(playerEntryPrefab);
         entry.transform.SetParent(playerList);
         entry.transform.localScale = Vector3.one;
-        entry.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = newPlayer.NickName;
 
         playerListEntries.Add(newPlayer.ActorNumber, entry);
+
+        entry.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + playerListEntries.Count + ": " + newPlayer.NickName;
 
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 2)
         {
