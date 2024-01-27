@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CreateAndJoin : MonoBehaviourPunCallbacks
@@ -95,8 +96,42 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
         Debug.Log(message);
     }
 
-    public void Leave()
+    public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+    }
+    
+    public override void OnLeftRoom()
+    {
+        outRoomPanel.SetActive(true);
+
+        inRoomPanel.SetActive(false);
+        
+        playerEntrys[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player 1:";
+
+        playerEntrys[1].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player 2:";
+    }
+    
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            LeaveRoom();
+        }
+    }
+
+    public void LeaveLobby()
+    {
+        PhotonNetwork.LeaveLobby();
+    }
+    
+    public override  void OnLeftLobby()
+    {
+        PhotonNetwork.Disconnect();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        SceneManager.LoadScene("LoadingScene");
     }
 }

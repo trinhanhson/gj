@@ -5,9 +5,10 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Manager : MonoBehaviour
+public class Manager : MonoBehaviourPunCallbacks
 {
     public static Manager Instance;
 
@@ -87,37 +88,42 @@ public class Manager : MonoBehaviour
         finishUI.SetActive(true);
 
         finishText.SetActive(true);
+        
+        winText.gameObject.SetActive(false);
+        
+        continueButton.gameObject.SetActive(false);
 
         DOVirtual.DelayedCall(1.5f, () =>
         {
             winnerAudioSource.Play();
 
             finishText.SetActive(false);
+            
+            winText.gameObject.SetActive(true);
 
             winText.text = player.NickName + " win!";
 
-            if (player == PhotonNetwork.LocalPlayer)
+            if (player.Equals(PhotonNetwork.LocalPlayer) )
             {
                 this.player.ChangeState(SimpleController.State.Win);
+            }
+            else
+            {
+                this.enemy.ChangeState(SimpleController.State.Win);
             }
 
             if (PhotonNetwork.IsMasterClient)
             {
                 continueButton.gameObject.SetActive(true);
             }
-            else
-            {
-                continueButton.gameObject.SetActive(false);
-            }
         });
     }
 
     public void Restart()
     {
-        player.photonView.RPC("RPC_Restart", RpcTarget.AllViaServer);
+        player.Restart();
     }
-
-    [PunRPC]
+    
     public void RPC_Restart()
     {
         finishUI.SetActive(false);
@@ -128,13 +134,36 @@ public class Manager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
+            player.rb.velocity = Vector3.up;
+            
             player.transform.SetPositionAndRotation(pos1.position, Quaternion.identity);
+   
         }
         else
         {
+            player.rb.velocity = Vector3.up;
+            
             player.transform.SetPositionAndRotation(pos2.position, Quaternion.identity);
+
         }
 
         player.ChangeState(SimpleController.State.Idle);
+        
+        enemy.ChangeState(SimpleController.State.Idle);
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public override  void OnLeftRoom()
+    {
+        SceneManager.LoadScene("Lobby");
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        PhotonNetwork.LeaveRoom();
     }
 }
