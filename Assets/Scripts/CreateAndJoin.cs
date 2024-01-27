@@ -14,13 +14,13 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
 
     public Transform playerList;
 
-    public GameObject playerEntryPrefab;
-
     public GameObject inRoomPanel;
 
     public GameObject outRoomPanel;
 
     public Dictionary<int, GameObject> playerListEntries;
+
+    public List<GameObject> playerEntrys = new();
 
     public Button startButton;
 
@@ -74,27 +74,15 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
 
         playerListEntries = new Dictionary<int, GameObject>();
 
-        foreach (Player p in PhotonNetwork.PlayerList)
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            GameObject entry = Instantiate(playerEntryPrefab);
-            entry.transform.SetParent(playerList);
-            entry.transform.localScale = Vector3.one;
-
-            playerListEntries.Add(p.ActorNumber, entry);
-
-            entry.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + playerListEntries.Count + ": " + p.NickName;
+            playerEntrys[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + (i + 1) + ":\n" + PhotonNetwork.PlayerList[i].NickName;
         }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        GameObject entry = Instantiate(playerEntryPrefab);
-        entry.transform.SetParent(playerList);
-        entry.transform.localScale = Vector3.one;
-
-        playerListEntries.Add(newPlayer.ActorNumber, entry);
-
-        entry.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + playerListEntries.Count + ": " + newPlayer.NickName;
+        playerEntrys[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + 2 + ":\n" + PhotonNetwork.PlayerList[1].NickName;
 
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 2)
         {

@@ -7,6 +7,7 @@ using TMPro;
 
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
+    public GameObject nameGO;
 
     public TextMeshProUGUI nameText;
 
@@ -17,6 +18,14 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.NickName = nameText.text;
 
             PhotonNetwork.ConnectUsingSettings();
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && !nameGO.activeInHierarchy)
+        {
+            nameGO.SetActive(true);
         }
     }
 
