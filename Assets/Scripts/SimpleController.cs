@@ -64,6 +64,8 @@ public class SimpleController : MonoBehaviour
         foreach (var i in rigidbodies)
         {
             i.isKinematic = true;
+
+            i.useGravity = false;
         }
 
         foreach (var i in colliders)
@@ -145,8 +147,11 @@ public class SimpleController : MonoBehaviour
         {
             inputDir = new Vector3(Manager.Instance.joystick.Direction.x, 0, Manager.Instance.joystick.Direction.y);
 
-            transform.forward = Vector3.Slerp(transform.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
-
+            if (state != State.Hit)
+            {
+                transform.forward = Vector3.Slerp(transform.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
+            }
+            
             Vector3 temp = speed * Time.fixedDeltaTime * inputDir;
             switch (state)
             {
@@ -199,9 +204,12 @@ public class SimpleController : MonoBehaviour
         {
             case State.Idle:
                 animator.enabled = true;
+                animator.ResetTrigger("Run");
                 foreach (var i in rigidbodies)
                 {
                     i.isKinematic = true;
+                    
+                    i.useGravity = false;
                 }
 
                 foreach (var i in colliders)
@@ -210,8 +218,10 @@ public class SimpleController : MonoBehaviour
                 }
 
                 rb.isKinematic = false;
+                
+                rb.useGravity = true;
 
-                hitbox.enabled = false;
+                hitbox.enabled = true;
                 animator.SetTrigger("Idle");
                 break;
             case State.Run:
@@ -230,6 +240,8 @@ public class SimpleController : MonoBehaviour
                 foreach (var i in rigidbodies)
                 {
                     i.isKinematic = false;
+                    
+                    i.useGravity = true;
                 }
 
                 foreach (var i in colliders)
@@ -238,15 +250,20 @@ public class SimpleController : MonoBehaviour
                 }
 
                 rb.isKinematic = true;
+                
+                rb.useGravity = false;
 
-                hitbox.enabled = true;
+                hitbox.enabled = false;
 
                 DOVirtual.DelayedCall(2f, () =>
                 {
+                    Vector3 temp = midSpine.transform.position;
                     animator.enabled = true;
                     foreach (var i in rigidbodies)
                     {
                         i.isKinematic = true;
+
+                        i.useGravity = false;
                     }
 
                     foreach (var i in colliders)
@@ -255,10 +272,14 @@ public class SimpleController : MonoBehaviour
                     }
 
                     rb.isKinematic = false;
+                    
+                    rb.useGravity = true;
 
-                    hitbox.enabled = false;
+                    hitbox.enabled = true;
 
                     ChangeState(State.Idle);
+
+                    transform.position = temp;
                 });
 
                 break;
