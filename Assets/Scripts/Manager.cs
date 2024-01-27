@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
@@ -10,23 +11,17 @@ public class Manager : MonoBehaviour
 
     public GameObject playerPrefab;
 
+    public GameObject fartPrefab;
+
     public Joystick joystick;
 
-    public float minX, maxX, minY, maxY;
+    public Button attackButton;
 
-    public int playerCount;
-
-    public TextMeshProUGUI timeTextMesh;
-
-    public float Countdown = 5.0f;
+    public float minX, maxX, minZ, maxZ;
 
     public SimpleController player;
 
     public SimpleController enemy;
-
-    private bool isTimerRunning;
-
-    private int startTime;
 
     private void Awake()
     {
@@ -40,79 +35,18 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
-        Vector2 randomPosition = new(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        Vector3 randomPosition = new(Random.Range(minX, maxX), 5, Random.Range(minZ, maxZ));
 
         PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity);
-
-        Initialize();
     }
 
-    public void Update()
+    private void Update()
     {
-        if (!isTimerRunning) return;
-
-        float countdown = TimeRemaining();
-        timeTextMesh.text = string.Format("Game starts in {0} seconds", countdown.ToString("n0"));
-
-        if (countdown > 0.0f) return;
-
-        OnTimerEnds();
+        if (Input.GetKeyDown(KeyCode.Space)) { Attack(); }
     }
 
-    private void Initialize()
+    public void Attack()
     {
-        if (TryGetStartTime(out int propStartTime))
-        {
-            startTime = propStartTime;
-            Debug.Log("Initialize sets StartTime " + this.startTime + " server time now: " + PhotonNetwork.ServerTimestamp + " remain: " + TimeRemaining());
-
-
-            isTimerRunning = TimeRemaining() > 0;
-
-            if (isTimerRunning)
-                OnTimerRuns();
-            else
-                OnTimerEnds();
-        }
-    }
-
-    public static bool TryGetStartTime(out int startTimestamp)
-    {
-        startTimestamp = PhotonNetwork.ServerTimestamp;
-
-        object startTimeFromProps;
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("StartTime", out startTimeFromProps))
-        {
-            startTimestamp = (int)startTimeFromProps;
-            return true;
-        }
-
-        return false;
-    }
-
-    private float TimeRemaining()
-    {
-        int timer = PhotonNetwork.ServerTimestamp - startTime;
-        return Countdown - timer / 1000f;
-    }
-
-
-    private void OnTimerRuns()
-    {
-        isTimerRunning = true;
-    }
-
-    private void OnTimerEnds()
-    {
-        isTimerRunning = false;
-
-        timeTextMesh.text = string.Empty;
-
-        StartGame();
-    }
-
-    private void StartGame()
-    {
-
+        PhotonNetwork.Instantiate(fartPrefab.name, new Vector3(player.transform.position.x, 0.5f, player.transform.position.z), Quaternion.identity).transform.forward = new Vector3(joystick.Direction.x, 0, joystick.Direction.y);
     }
 }

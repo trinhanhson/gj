@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public TextMeshProUGUI nameText;
+
+    public void Startgame()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        if (nameText.text != "")
+        {
+            PhotonNetwork.LocalPlayer.NickName = nameText.text;
+
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
+
+    // private void Start()
+    // {
+    //     PhotonNetwork.ConnectUsingSettings();
+    // }
 
     public override void OnConnectedToMaster()
     {
