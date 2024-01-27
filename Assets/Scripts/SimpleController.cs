@@ -31,6 +31,8 @@ public class SimpleController : MonoBehaviour
 
     public bool ableToAttack = true;
 
+    public bool isDie = false;
+
     private void Start()
     {
         if (photonView.IsMine)
@@ -42,11 +44,17 @@ public class SimpleController : MonoBehaviour
         else
         {
             Manager.Instance.enemy = this;
+
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
         }
     }
 
     void Update()
     {
+        if (isDie)
+        {
+            return;
+        }
         if (photonView.IsMine)
         {
             switch (state)
@@ -54,6 +62,7 @@ public class SimpleController : MonoBehaviour
                 case State.Idle:
                     if (transform.position.y < Manager.Instance.bottom.position.y)
                     {
+                        isDie = true;
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                         {
                             if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)
@@ -68,6 +77,7 @@ public class SimpleController : MonoBehaviour
                 case State.Run:
                     if (transform.position.y < Manager.Instance.bottom.position.y)
                     {
+                        isDie = true;
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                         {
                             if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)
@@ -81,6 +91,7 @@ public class SimpleController : MonoBehaviour
                 case State.Attack:
                     if (transform.position.y < Manager.Instance.bottom.position.y)
                     {
+                        isDie = true;
                         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                         {
                             if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)

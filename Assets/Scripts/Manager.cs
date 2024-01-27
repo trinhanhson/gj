@@ -106,7 +106,17 @@ public class Manager : MonoBehaviour
 
     public void Restart()
     {
+        player.photonView.RPC("RPC_Restart", RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    public void RPC_Restart()
+    {
         finishUI.SetActive(false);
+
+        player.isDie = false;
+
+        enemy.isDie = false;
 
         if (PhotonNetwork.IsMasterClient)
         {
