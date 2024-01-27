@@ -102,5 +102,7 @@ public class Manager : MonoBehaviour
         {
             player.transform.SetPositionAndRotation(pos2.position, Quaternion.identity);
         }
+
+        player.ChangeState(SimpleController.State.Idle);
     }
 }
