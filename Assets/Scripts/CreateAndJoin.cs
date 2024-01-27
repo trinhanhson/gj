@@ -76,7 +76,7 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            playerEntrys[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + (i + 1) + ":\n" + PhotonNetwork.PlayerList[i].NickName;
+            playerEntrys[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + (i + 1) + ":\n" + PhotonNetwork.PlayerList[i].NickName;
         }
     }
 

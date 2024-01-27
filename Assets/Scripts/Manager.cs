@@ -35,6 +35,8 @@ public class Manager : MonoBehaviour
 
     public Button continueButton;
 
+    public GameObject finishText;
+
     private void Awake()
     {
         if (Instance != null)
@@ -78,16 +80,28 @@ public class Manager : MonoBehaviour
     {
         finishUI.SetActive(true);
 
-        winText.text = player.NickName + " win!";
+        finishText.SetActive(true);
 
-        if (PhotonNetwork.IsMasterClient)
+        DOVirtual.DelayedCall(1.5f, () =>
         {
-            continueButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            continueButton.gameObject.SetActive(false);
-        }
+            finishText.SetActive(false);
+
+            winText.text = player.NickName + " win!";
+
+            if (player == PhotonNetwork.LocalPlayer)
+            {
+                this.player.ChangeState(SimpleController.State.Win);
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                continueButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                continueButton.gameObject.SetActive(false);
+            }
+        });
     }
 
     public void Restart()
