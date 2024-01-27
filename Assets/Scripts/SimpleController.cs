@@ -57,9 +57,9 @@ public class SimpleController : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("Enemy");
         }
 
-        rigidbodies = GetComponentsInChildren<Rigidbody>();
+        rigidbodies = transform.GetChild(0).GetChild(0).GetComponentsInChildren<Rigidbody>();
 
-        colliders = GetComponentsInChildren<Collider>();
+        colliders = transform.GetChild(0).GetChild(0).GetComponentsInChildren<Collider>();
 
         foreach (var i in rigidbodies)
         {
@@ -134,7 +134,8 @@ public class SimpleController : MonoBehaviour
 
     [PunRPC]
     public void RPC_Finish(Player player)
-    {Debug.Log(1);
+    {
+        Debug.Log(1);
         Manager.Instance.Finish(player);
     }
 
@@ -210,7 +211,7 @@ public class SimpleController : MonoBehaviour
 
                 rb.isKinematic = false;
 
-                hitbox.enabled = false;
+                hitbox.enabled = true;
                 animator.SetTrigger("Idle");
                 break;
             case State.Run:
@@ -238,7 +239,7 @@ public class SimpleController : MonoBehaviour
 
                 rb.isKinematic = true;
 
-                hitbox.enabled = true;
+                hitbox.enabled = false;
 
                 DOVirtual.DelayedCall(2f, () =>
                 {
@@ -255,7 +256,7 @@ public class SimpleController : MonoBehaviour
 
                     rb.isKinematic = false;
 
-                    hitbox.enabled = false;
+                    hitbox.enabled = true;
 
                     ChangeState(State.Idle);
                 });
@@ -270,7 +271,7 @@ public class SimpleController : MonoBehaviour
     {
         photonView.RPC("RPC_Restart", RpcTarget.AllViaServer);
     }
-    
+
     [PunRPC]
     public void RPC_Restart()
     {

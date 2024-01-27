@@ -2235,7 +2235,7 @@ Transform:
   m_Children:
   - {fileID: 2044553954185609969}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &4012380552964456496
 CapsuleCollider:
@@ -2254,7 +2254,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.47
   m_Height: 1.8501128
