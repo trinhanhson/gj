@@ -82,7 +82,7 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        playerEntrys[0].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + 2 + ":\n" + PhotonNetwork.PlayerList[1].NickName;
+        playerEntrys[1].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Player " + 2 + ":\n" + PhotonNetwork.PlayerList[1].NickName;
 
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.PlayerList.Length == 2)
         {
