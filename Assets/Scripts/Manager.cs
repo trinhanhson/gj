@@ -41,6 +41,8 @@ public class Manager : MonoBehaviourPunCallbacks
     public AudioSource finishAudioSource;
 
     public AudioSource winnerAudioSource;
+    
+    public AudioSource startAudioSource;
 
     private void Awake()
     {
@@ -62,6 +64,8 @@ public class Manager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.Instantiate(playerPrefab2.name, pos2.position, Quaternion.identity);
         }
+        
+        startAudioSource.Play();
     }
 
     private void Update()
@@ -156,6 +160,8 @@ public class Manager : MonoBehaviourPunCallbacks
         player.ChangeState(SimpleController.State.Idle);
 
         enemy.ChangeState(SimpleController.State.Idle);
+        
+        startAudioSource.Play();
     }
 
     public void LeaveRoom()
