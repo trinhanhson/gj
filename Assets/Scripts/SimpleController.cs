@@ -188,7 +188,7 @@ public class SimpleController : MonoBehaviour
     {
         ChangeState(State.Hit);
 
-        rb.AddForce(force + Vector3.up * 100, ForceMode.VelocityChange);
+        midSpine.AddForce(force + Vector3.up, ForceMode.VelocityChange);
     }
 
     public void ChangeState(State _state)
@@ -209,9 +209,9 @@ public class SimpleController : MonoBehaviour
                     i.enabled = false;
                 }
 
-                // rb.isKinematic = false;
+                rb.isKinematic = false;
 
-                hitbox.enabled = true;
+                hitbox.enabled = false;
                 animator.SetTrigger("Idle");
                 break;
             case State.Run:
@@ -237,9 +237,9 @@ public class SimpleController : MonoBehaviour
                     i.enabled = true;
                 }
 
-                // rb.isKinematic = true;
+                rb.isKinematic = true;
 
-                hitbox.enabled = false;
+                hitbox.enabled = true;
 
                 DOVirtual.DelayedCall(2f, () =>
                 {
@@ -254,9 +254,9 @@ public class SimpleController : MonoBehaviour
                         i.enabled = false;
                     }
 
-                    // rb.isKinematic = false;
+                    rb.isKinematic = false;
 
-                    hitbox.enabled = true;
+                    hitbox.enabled = false;
 
                     ChangeState(State.Idle);
                 });
