@@ -16,6 +16,8 @@ public class SimpleController : MonoBehaviour
         if (photonView.IsMine)
         {
             Manager.Instance.player = this;
+
+            gameObject.layer = LayerMask.NameToLayer("Player");
         }
         else
         {
@@ -40,4 +42,17 @@ public class SimpleController : MonoBehaviour
             rb.AddForce(speed * Time.fixedDeltaTime * new Vector3(Manager.Instance.joystick.Direction.x, 0, Manager.Instance.joystick.Direction.y), ForceMode.VelocityChange);
         }
     }
+
+    public void Push(Vector3 force)
+    {
+        photonView.RPC("RPC_Push", RpcTarget.AllViaServer, force);
+    }
+
+    [PunRPC]
+    public void RPC_Push(Vector3 force)
+    {
+        rb.AddForce(force, ForceMode.VelocityChange);
+    }
+
+
 }

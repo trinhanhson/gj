@@ -83,6 +83,8 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
 
             playerListEntries.Add(p.ActorNumber, entry);
         }
+
+        // startButton.gameObject.SetActive(true);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
