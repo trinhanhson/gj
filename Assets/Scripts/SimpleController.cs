@@ -188,7 +188,7 @@ public class SimpleController : MonoBehaviour
     {
         ChangeState(State.Hit);
 
-        midSpine.AddForce(force + Vector3.up * 2, ForceMode.VelocityChange);
+        midSpine.AddForce(force + Vector3.up * 1000, ForceMode.VelocityChange);
     }
 
     public void ChangeState(State _state)
