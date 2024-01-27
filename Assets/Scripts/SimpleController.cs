@@ -12,7 +12,8 @@ public class SimpleController : MonoBehaviour
         Idle,
         Run,
         Win,
-        Attack
+        Attack,
+        Hit
     }
 
     public State state;
@@ -25,6 +26,10 @@ public class SimpleController : MonoBehaviour
 
     public Rigidbody rb;
 
+    public Rigidbody midSpine;
+
+    public Collider hitbox;
+
     public Vector3 inputDir;
 
     public float rotationSpeed;
@@ -32,6 +37,10 @@ public class SimpleController : MonoBehaviour
     public bool ableToAttack = true;
 
     public bool isDie = false;
+
+    public Rigidbody[] rigidbodies;
+
+    public Collider[] colliders;
 
     private void Start()
     {
@@ -46,6 +55,20 @@ public class SimpleController : MonoBehaviour
             Manager.Instance.enemy = this;
 
             gameObject.layer = LayerMask.NameToLayer("Enemy");
+        }
+
+        rigidbodies = GetComponentsInChildren<Rigidbody>();
+
+        colliders = GetComponentsInChildren<Collider>();
+
+        foreach (var i in rigidbodies)
+        {
+            i.isKinematic = true;
+        }
+
+        foreach (var i in colliders)
+        {
+            i.enabled = false;
         }
     }
 
@@ -162,7 +185,9 @@ public class SimpleController : MonoBehaviour
     [PunRPC]
     public void RPC_Push(Vector3 force)
     {
-        rb.AddForce(force, ForceMode.VelocityChange);
+        ChangeState(State.Hit);
+
+        midSpine.AddForce(force + Vector3.up, ForceMode.VelocityChange);
     }
 
     public void ChangeState(State _state)
@@ -172,6 +197,20 @@ public class SimpleController : MonoBehaviour
         switch (state)
         {
             case State.Idle:
+                animator.enabled = true;
+                foreach (var i in rigidbodies)
+                {
+                    i.isKinematic = true;
+                }
+
+                foreach (var i in colliders)
+                {
+                    i.enabled = false;
+                }
+
+                rb.isKinematic = false;
+
+                hitbox.enabled = false;
                 animator.SetTrigger("Idle");
                 break;
             case State.Run:
@@ -184,6 +223,43 @@ public class SimpleController : MonoBehaviour
                 break;
             case State.Win:
                 animator.SetTrigger("Win");
+                break;
+            case State.Hit:
+                animator.enabled = false;
+                foreach (var i in rigidbodies)
+                {
+                    i.isKinematic = false;
+                }
+
+                foreach (var i in colliders)
+                {
+                    i.enabled = true;
+                }
+
+                rb.isKinematic = true;
+
+                hitbox.enabled = true;
+
+                DOVirtual.DelayedCall(2f, () =>
+                {
+                    animator.enabled = true;
+                    foreach (var i in rigidbodies)
+                    {
+                        i.isKinematic = true;
+                    }
+
+                    foreach (var i in colliders)
+                    {
+                        i.enabled = false;
+                    }
+
+                    rb.isKinematic = false;
+
+                    hitbox.enabled = false;
+
+                    ChangeState(State.Idle);
+                });
+
                 break;
             default:
                 break;

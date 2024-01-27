@@ -37,6 +37,10 @@ public class Manager : MonoBehaviour
 
     public GameObject finishText;
 
+    public AudioSource finishAudioSource;
+
+    public AudioSource winnerAudioSource;
+
     private void Awake()
     {
         if (Instance != null)
@@ -78,12 +82,16 @@ public class Manager : MonoBehaviour
 
     public void Finish(Player player)
     {
+        finishAudioSource.Play();
+
         finishUI.SetActive(true);
 
         finishText.SetActive(true);
 
         DOVirtual.DelayedCall(1.5f, () =>
         {
+            winnerAudioSource.Play();
+
             finishText.SetActive(false);
 
             winText.text = player.NickName + " win!";
