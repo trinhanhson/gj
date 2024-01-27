@@ -188,7 +188,7 @@ public class SimpleController : MonoBehaviour
     {
         ChangeState(State.Hit);
 
-        midSpine.AddForce(force + Vector3.up * 20, ForceMode.VelocityChange);
+        rb.AddForce(force + Vector3.up * 100, ForceMode.VelocityChange);
     }
 
     public void ChangeState(State _state)
@@ -209,7 +209,7 @@ public class SimpleController : MonoBehaviour
                     i.enabled = false;
                 }
 
-                rb.isKinematic = false;
+                // rb.isKinematic = false;
 
                 hitbox.enabled = true;
                 animator.SetTrigger("Idle");
@@ -237,7 +237,7 @@ public class SimpleController : MonoBehaviour
                     i.enabled = true;
                 }
 
-                rb.isKinematic = true;
+                // rb.isKinematic = true;
 
                 hitbox.enabled = false;
 
@@ -254,7 +254,7 @@ public class SimpleController : MonoBehaviour
                         i.enabled = false;
                     }
 
-                    rb.isKinematic = false;
+                    // rb.isKinematic = false;
 
                     hitbox.enabled = true;
 

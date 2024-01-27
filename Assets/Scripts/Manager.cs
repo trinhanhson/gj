@@ -88,9 +88,9 @@ public class Manager : MonoBehaviourPunCallbacks
         finishUI.SetActive(true);
 
         finishText.SetActive(true);
-        
+
         winText.gameObject.SetActive(false);
-        
+
         continueButton.gameObject.SetActive(false);
 
         DOVirtual.DelayedCall(1.5f, () =>
@@ -98,14 +98,18 @@ public class Manager : MonoBehaviourPunCallbacks
             winnerAudioSource.Play();
 
             finishText.SetActive(false);
-            
+
             winText.gameObject.SetActive(true);
 
             winText.text = player.NickName + " win!";
 
-            if (player.Equals(PhotonNetwork.LocalPlayer) )
+            Camera.main.fieldOfView = 45;
+
+            if (player.Equals(PhotonNetwork.LocalPlayer))
             {
                 this.player.ChangeState(SimpleController.State.Win);
+
+                this.player.transform.position = Vector3.zero;
             }
             else
             {
@@ -123,9 +127,11 @@ public class Manager : MonoBehaviourPunCallbacks
     {
         player.Restart();
     }
-    
+
     public void RPC_Restart()
     {
+        Camera.main.fieldOfView = 60;
+
         finishUI.SetActive(false);
 
         player.isDie = false;
@@ -135,20 +141,20 @@ public class Manager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             player.rb.velocity = Vector3.up;
-            
+
             player.transform.SetPositionAndRotation(pos1.position, Quaternion.identity);
-   
+
         }
         else
         {
             player.rb.velocity = Vector3.up;
-            
+
             player.transform.SetPositionAndRotation(pos2.position, Quaternion.identity);
 
         }
 
         player.ChangeState(SimpleController.State.Idle);
-        
+
         enemy.ChangeState(SimpleController.State.Idle);
     }
 
@@ -157,7 +163,7 @@ public class Manager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
-    public override  void OnLeftRoom()
+    public override void OnLeftRoom()
     {
         SceneManager.LoadScene("Lobby");
     }
