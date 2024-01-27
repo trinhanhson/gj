@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +11,9 @@ public class Manager : MonoBehaviour
 {
     public static Manager Instance;
 
-    public GameObject playerPrefab;
+    public GameObject playerPrefab1;
+
+    public GameObject playerPrefab2;
 
     public GameObject fartPrefab;
 
@@ -17,11 +21,19 @@ public class Manager : MonoBehaviour
 
     public Button attackButton;
 
-    public float minX, maxX, minZ, maxZ;
+    public Transform pos1, pos2;
+
+    public Transform bottom;
 
     public SimpleController player;
 
     public SimpleController enemy;
+
+    public GameObject finishUI;
+
+    public TextMeshProUGUI winText;
+
+    public Button continueButton;
 
     private void Awake()
     {
@@ -35,9 +47,14 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
-        Vector3 randomPosition = new(Random.Range(minX, maxX), 5, Random.Range(minZ, maxZ));
-
-        PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Instantiate(playerPrefab1.name, pos1.position, Quaternion.identity);
+        }
+        else
+        {
+            PhotonNetwork.Instantiate(playerPrefab2.name, pos2.position, Quaternion.identity);
+        }
     }
 
     private void Update()
@@ -47,6 +64,47 @@ public class Manager : MonoBehaviour
 
     public void Attack()
     {
-        PhotonNetwork.Instantiate(fartPrefab.name, new Vector3(player.transform.position.x, 0.5f, player.transform.position.z), Quaternion.identity).transform.forward = new Vector3(joystick.Direction.x, 0, joystick.Direction.y);
+        if (!player.ableToAttack)
+        {
+            return;
+        }
+
+        player.ChangeState(SimpleController.State.Attack);
+
+        DOVirtual.DelayedCall(1, () => PhotonNetwork.Instantiate(fartPrefab.name, new Vector3(player.transform.position.x, 0.5f, player.transform.position.z), Quaternion.identity).transform.forward = new Vector3(player.transform.forward.x, 0, player.transform.forward.z));
+    }
+
+    public void Finish(Player player)
+    {
+        Time.timeScale = 0;
+
+        finishUI.SetActive(true);
+
+        winText.text = player.NickName + " win!";
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            continueButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            continueButton.gameObject.SetActive(false);
+        }
+    }
+
+    public void Restart()
+    {
+        Time.timeScale = 1;
+
+        finishUI.SetActive(false);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            player.transform.SetPositionAndRotation(pos1.position, Quaternion.identity);
+        }
+        else
+        {
+            player.transform.SetPositionAndRotation(pos2.position, Quaternion.identity);
+        }
     }
 }

@@ -41,6 +41,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - Push
   - RPC_Push
+  - RPC_Finish
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
