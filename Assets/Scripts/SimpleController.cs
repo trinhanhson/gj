@@ -42,6 +42,8 @@ public class SimpleController : MonoBehaviour
 
     public Collider[] colliders;
 
+    public AudioSource hitSound;
+
     private void Start()
     {
         if (photonView.IsMine)
@@ -194,6 +196,8 @@ public class SimpleController : MonoBehaviour
         ChangeState(State.Hit);
 
         midSpine.AddForce(force + Vector3.up, ForceMode.VelocityChange);
+        
+        hitSound.Play();
     }
 
     public void ChangeState(State _state)
