@@ -94,4 +94,9 @@ public class CreateAndJoin : MonoBehaviourPunCallbacks
     {
         Debug.Log(message);
     }
+
+    public void Leave()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
 }

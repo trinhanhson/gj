@@ -76,8 +76,6 @@ public class Manager : MonoBehaviour
 
     public void Finish(Player player)
     {
-        Time.timeScale = 0;
-
         finishUI.SetActive(true);
 
         winText.text = player.NickName + " win!";
@@ -94,8 +92,6 @@ public class Manager : MonoBehaviour
 
     public void Restart()
     {
-        Time.timeScale = 1;
-
         finishUI.SetActive(false);
 
         if (PhotonNetwork.IsMasterClient)

@@ -60,6 +60,10 @@ public class SimpleController : MonoBehaviour
                             {
                                 photonView.RPC("RPC_Finish", RpcTarget.AllViaServer, PhotonNetwork.PlayerList[i]);
                             }
+                            else
+                            {
+                                ChangeState(State.Win);
+                            }
                         }
                     }
 
@@ -73,6 +77,10 @@ public class SimpleController : MonoBehaviour
                             {
                                 photonView.RPC("RPC_Finish", RpcTarget.AllViaServer, PhotonNetwork.PlayerList[i]);
                             }
+                            else
+                            {
+                                ChangeState(State.Win);
+                            }
                         }
                     }
 
@@ -85,6 +93,10 @@ public class SimpleController : MonoBehaviour
                             if (PhotonNetwork.PlayerList[i].NickName != PhotonNetwork.LocalPlayer.NickName)
                             {
                                 photonView.RPC("RPC_Finish", RpcTarget.AllViaServer, PhotonNetwork.PlayerList[i]);
+                            }
+                            else
+                            {
+                                ChangeState(State.Win);
                             }
                         }
                     }
