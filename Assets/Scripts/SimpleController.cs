@@ -59,9 +59,9 @@ public class SimpleController : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("Enemy");
         }
 
-        rigidbodies = transform.GetChild(0).GetChild(0).GetComponentsInChildren<Rigidbody>();
+        rigidbodies = transform.GetChild(0).GetComponentsInChildren<Rigidbody>();
 
-        colliders = transform.GetChild(0).GetChild(0).GetComponentsInChildren<Collider>();
+        colliders = transform.GetChild(0).GetComponentsInChildren<Collider>();
 
         foreach (var i in rigidbodies)
         {
@@ -153,7 +153,7 @@ public class SimpleController : MonoBehaviour
             {
                 transform.forward = Vector3.Slerp(transform.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
             }
-            
+
             Vector3 temp = speed * Time.fixedDeltaTime * inputDir;
             switch (state)
             {
@@ -196,7 +196,7 @@ public class SimpleController : MonoBehaviour
         ChangeState(State.Hit);
 
         midSpine.AddForce(force + Vector3.up, ForceMode.VelocityChange);
-        
+
         hitSound.Play();
     }
 
@@ -212,7 +212,7 @@ public class SimpleController : MonoBehaviour
                 foreach (var i in rigidbodies)
                 {
                     i.isKinematic = true;
-                    
+
                     i.useGravity = false;
                 }
 
@@ -222,7 +222,7 @@ public class SimpleController : MonoBehaviour
                 }
 
                 rb.isKinematic = false;
-                
+
                 rb.useGravity = true;
 
                 hitbox.enabled = true;
@@ -244,7 +244,7 @@ public class SimpleController : MonoBehaviour
                 foreach (var i in rigidbodies)
                 {
                     i.isKinematic = false;
-                    
+
                     i.useGravity = true;
                 }
 
@@ -254,7 +254,7 @@ public class SimpleController : MonoBehaviour
                 }
 
                 rb.isKinematic = true;
-                
+
                 rb.useGravity = false;
 
                 hitbox.enabled = false;
@@ -276,7 +276,7 @@ public class SimpleController : MonoBehaviour
                     }
 
                     rb.isKinematic = false;
-                    
+
                     rb.useGravity = true;
 
                     hitbox.enabled = true;
